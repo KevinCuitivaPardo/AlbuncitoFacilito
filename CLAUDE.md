@@ -17,9 +17,19 @@ El frontend consume la API: no accede a los datos directamente.
 
 - Paquete `albuncito-facilito-api`: NestJS 12 sobre Express, TypeScript en ESM (imports relativos con extensión `.js`).
 - Tests con Vitest (unitarios `src/**/*.spec.ts`, e2e en `test/*.e2e-spec.ts` con supertest) y lint con oxlint.
-- Escucha en el puerto 3001 (variable `PORT`); por ahora solo tiene el endpoint de ejemplo `GET /`.
-- Sin base de datos, Prettier ni telemetría: solo las dependencias necesarias para correr, testear y lintear.
+- Escucha en el puerto 3001 (variable `PORT`). Endpoints: `GET /` (ejemplo) y los de autenticación (`/auth/*`, ver abajo).
+- Base de datos: SQLite nativo de Node (`node:sqlite`), archivo `data/albuncito.db` dentro de la API (ignorado por git). Sin ORM.
+- Dependencias de auth: `@nestjs/jwt` y `zod` (validación). Sin Prettier ni telemetría.
 - Comandos propios (`pnpm dev`, `pnpm test`, `pnpm test:e2e`, `pnpm lint`) en su `CLAUDE.md`.
+
+### Autenticación (signup/login con email y contraseña)
+
+- La API expone `POST /auth/signup` (`name`, `email`, `password`; 201 con `accessToken` y `user`; 409 si el email existe), `POST /auth/login` (`email`, `password`; 200; 401 "Credenciales inválidas") y `GET /auth/me` (requiere `Authorization: Bearer <JWT>`).
+- Las contraseñas se guardan con hash scrypt (`scrypt$N$r$p$sal$hash`), nunca en texto plano. El JWT dura 7 días y se firma con `JWT_SECRET`.
+- Cada usuario tiene un `slug` único generado a partir de su `name` (`Ana Pérez` → `ana-perez`, `ana-perez-2` si ya existe). Los slugs `login`, `signup`, `logout` y `api` están reservados.
+- El frontend tiene `/signup`, `/login` y el dashboard en `/[slug]`. Los Server Actions llaman a la API, guardan el JWT en la cookie `session` (httpOnly) y redirigen a `/<slug>`.
+- Variables de entorno: API en `services/albuncito-facilito-api/.env` (`JWT_SECRET` obligatorio; copia `.env.example`); frontend usa `API_URL` (opcional, por defecto `http://localhost:3001`). Los `.env` no se versionan.
+- Si cambias los endpoints de `/auth/*` o la forma de `user`, actualiza también `apps/albuncito-facilito-app/app/lib/api.ts`.
 
 ## Estructura del monorepo
 
@@ -31,6 +41,7 @@ El frontend consume la API: no accede a los datos directamente.
 ## Comandos (desde la raíz)
 
 - Instalar dependencias: `pnpm install`
+- Antes del primer `pnpm dev`: crea `services/albuncito-facilito-api/.env` a partir de `.env.example` y define `JWT_SECRET` (sin él la API no arranca).
 - Build: `pnpm build`
 - Dev: `pnpm dev` (frontend en http://localhost:3000, API en http://localhost:3001)
 - Test: `pnpm test`

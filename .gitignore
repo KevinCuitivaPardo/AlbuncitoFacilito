@@ -4,6 +4,9 @@ node_modules/
 dist/
 coverage/
 .env*
+!.env.example
+# Base de datos SQLite local de la API
+data/
 *.tsbuildinfo
 next-env.d.ts
 .DS_Store
