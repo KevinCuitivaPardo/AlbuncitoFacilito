@@ -13,12 +13,40 @@ El producto tiene 2 partes, y cada una tiene su propio `CLAUDE.md`:
 
 El frontend consume la API: no accede a los datos directamente.
 
+### Detalles de la API (`services/albuncito-facilito-api`)
+
+- Paquete `albuncito-facilito-api`: NestJS 12 sobre Express, TypeScript en ESM (imports relativos con extensión `.js`).
+- Tests con Vitest (unitarios `src/**/*.spec.ts`, e2e en `test/*.e2e-spec.ts` con supertest) y lint con oxlint.
+- Escucha en el puerto 3001 (variable `PORT`); por ahora solo tiene el endpoint de ejemplo `GET /`.
+- Sin base de datos, Prettier ni telemetría: solo las dependencias necesarias para correr, testear y lintear.
+- Comandos propios (`pnpm dev`, `pnpm test`, `pnpm test:e2e`, `pnpm lint`) en su `CLAUDE.md`.
+
+## Estructura del monorepo
+
+- `apps/*`: aplicaciones (frontend). Workspace definido en `pnpm-workspace.yaml`.
+- `services/*`: APIs (backend).
+- `turbo.json`: tareas `build`, `dev`, `test` y `lint` que Turborepo ejecuta en todos los proyectos.
+- Usa siempre `pnpm` (la versión está fijada en `packageManager`); no uses npm ni yarn.
+
+## Comandos (desde la raíz)
+
+- Instalar dependencias: `pnpm install`
+- Build: `pnpm build`
+- Dev: `pnpm dev` (frontend en http://localhost:3000, API en http://localhost:3001)
+- Test: `pnpm test`
+- Lint: `pnpm lint`
+- Un solo proyecto: `pnpm turbo run <tarea> --filter=albuncito-facilito-app` (o `--filter=albuncito-facilito-api`)
+
 ## Reglas generales
 
 - Responde siempre en español.
-- Stack: pendiente, todavía no se han elegido las tecnologías.
+- Stack: monorepo con Turborepo 2.11 y pnpm 12 (TypeScript en todo el repo). Frontend con Next.js 16 y backend con NestJS 12.
 - Nombres de variables en inglés y comentarios en español.
 - Antes de hacer un commit, corre los tests si existen.
+
+## Development
+
+Cuando necesites instalar, actualizar o escribir código con cualquier librería o framework (Turborepo, pnpm, Next.js, NestJS, etc.), consulta primero la documentación actual con el MCP de context7.
 
 ## Git
 

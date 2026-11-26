@@ -12,10 +12,18 @@ Esta app consume la API de `services/albuncito-facilito-api`. Todos los datos (�
 
 Las reglas generales y de Git están en el `CLAUDE.md` de la raíz.
 
+## Stack
+
+Next.js 16 (App Router, Turbopack) con React 19, TypeScript y Tailwind CSS 4. Paquete: `albuncito-facilito-app`. Corre en el puerto 3000.
+
+Antes de escribir código de Next.js, consulta la documentación actual (Context7 o `node_modules/next/dist/docs/`): esta versión puede diferir de lo que conoces.
+
 ## Comandos
 
-Pendiente hasta elegir el stack.
+Desde la raíz del monorepo (recomendado) o desde esta carpeta con `pnpm <script>`:
 
-- Build: pendiente
-- Test: pendiente
-- Lint: pendiente
+- Dev: `pnpm dev`
+- Build: `pnpm build`
+- Test: `pnpm test` (todavía no hay framework de tests: el script solo avisa)
+- Lint: `pnpm lint` (ESLint)
+- Start (después del build): `pnpm start`
