@@ -12,3 +12,5 @@ next-env.d.ts
 .DS_Store
 CLAUDE.local.md
 .claude/settings.local.json
+# Artefactos de las pruebas con Playwright MCP
+.playwright-mcp/
